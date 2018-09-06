@@ -14,6 +14,7 @@ public class FlutterFirebaseMessagingService extends FirebaseMessagingService {
   public static final String ACTION_REMOTE_MESSAGE =
       "io.flutter.plugins.firebasemessaging.NOTIFICATION";
   public static final String EXTRA_REMOTE_MESSAGE = "notification";
+  private static final String ROUTE = "route";
 
   /**
    * Called when message is received.
@@ -22,6 +23,20 @@ public class FlutterFirebaseMessagingService extends FirebaseMessagingService {
    */
   @Override
   public void onMessageReceived(RemoteMessage remoteMessage) {
+    if (remoteMessage.getData().containsKey(ROUTE)) {
+      final Intent intent = getPackageManager().getLaunchIntentForPackage(getPackageName());
+
+      if (null != intent) {
+        intent.setAction(Intent.ACTION_RUN);
+        intent.putExtra(ROUTE, remoteMessage.getData().get(ROUTE));
+
+        //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        startActivity(intent);
+      }
+    }
+
     Intent intent = new Intent(ACTION_REMOTE_MESSAGE);
     intent.putExtra(EXTRA_REMOTE_MESSAGE, remoteMessage);
     LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
