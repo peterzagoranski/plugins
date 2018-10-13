@@ -6,6 +6,8 @@ package io.flutter.plugins.firebasemessaging;
 
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.WindowManager;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -23,12 +25,14 @@ public class FlutterFirebaseMessagingService extends FirebaseMessagingService {
    */
   @Override
   public void onMessageReceived(RemoteMessage remoteMessage) {
-    if (remoteMessage.getData().containsKey(ROUTE)) {
+    if (null == remoteMessage.getNotification() && remoteMessage.getData().containsKey(ROUTE)) {
       final Intent intent = getPackageManager().getLaunchIntentForPackage(getPackageName());
 
       if (null != intent) {
         intent.setAction(Intent.ACTION_RUN);
         intent.putExtra(ROUTE, remoteMessage.getData().get(ROUTE));
+        //intent.setFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+        intent.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 
         //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
