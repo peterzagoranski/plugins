@@ -1,3 +1,15 @@
+## 5.0.1
+
+* Fix error in the logs on startup if unable to retrieve token on startup on Android.
+
+## 5.0.0
+
+* Update Android dependencies to latest.
+
+## 4.0.0+4
+
+* Remove obsolete `use_frameworks!` instruction.
+
 ## 4.0.0+3
 
 * Update iOS configuration documentation.
